@@ -168,6 +168,17 @@ seller.
 
 ## 6. Qué Haría Diferente Con Más Tiempo
 
+- `extract_item()` (en `extract.py`) implementa una llamada a
+  `/items/{id}`, pero el pipeline actual nunca la invoca — los datos
+  de producto se toman enteramente de los resultados de `/search`.
+  Como `/search` está bloqueado durante el plazo de este proyecto (ver
+  sección 1), esto nunca se puso a prueba contra la API real, así que
+  no puedo confirmar si campos como `warranty` y `sold_quantity` están
+  realmente presentes en las respuestas de `/search` o solo en las de
+  detalle de `/items`. Conectar `extract_item()` al pipeline (una
+  llamada por publicación, o un fallback cuando falte un campo)
+  cerraría ese hueco una vez que el acceso a `/search` esté disponible
+  para probarlo.
 - Agregar una capa liviana de retry/backoff en `api.py` para errores de
   red transitorios (actualmente solo 403/401 tienen manejo especial;
   errores 5xx y timeouts se propagan directamente).

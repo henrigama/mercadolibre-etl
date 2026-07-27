@@ -153,6 +153,16 @@ seller order history.
 
 ## 6. What I Would Do Differently With More Time
 
+- `extract_item()` (in `extract.py`) implements a call to `/items/{id}`
+  but is never invoked by the current pipeline — product data is taken
+  entirely from `/search` results. Since `/search` is blocked for this
+  project's timeframe (see section 1), this was never exercised
+  against the real API, so I can't confirm whether fields like
+  `warranty` and `sold_quantity` are actually present on `/search`
+  responses or only on `/items` detail responses. Wiring
+  `extract_item()` into the pipeline (one call per listing, or a
+  fallback when a field is missing) would close that gap once
+  `/search` access is available to test against.
 - Add a lightweight retry/backoff layer in `api.py` for transient
   network errors (currently only 403/401 are handled specially;
   5xx and timeouts propagate directly).
