@@ -1,0 +1,30 @@
+# ==== Environment and credentials ====
+.env
+.venv/
+venv/
+
+# ==== Python ====
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# ==== ETL-generated logs ====
+logs/*.log
+!logs/.gitkeep
+
+# ==== VSCode ====
+.vscode/
+*.code-workspace
+
+# ==== OS ====
+.DS_Store
+Thumbs.db
+
+# ==== Local / temporary outputs ====
+*.tmp
+*.bak

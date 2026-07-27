@@ -1,0 +1,27 @@
+# Mercado Libre API settings
+api:
+  base_url: "https://api.mercadolibre.com"
+  site: "MLA"  # Argentina
+  timeout: 30  # seconds
+
+  # Endpoint templates. {site} and {item_id} are filled in at request time.
+  endpoints:
+    search: "sites/{site}/search"
+    item: "items/{item_id}"
+    currencies: "currencies/{currency_id}"
+    currency_conversions: "currency_conversions/search"
+
+# Search parameters for the target product
+search:
+  query: "Samsung Galaxy S24"
+  condition: "new"      # Only new listings are considered
+  page_size: 50         # Pagination size
+  max_records: 300      # Upper bound on total records fetched per run
+
+# Currency pair used to compute price_usd during transformation
+currency:
+  from: "ARS"
+  to: "USD"
+
+logging:
+  level: INFO
