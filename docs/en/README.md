@@ -6,11 +6,14 @@ normalized relational model, and loads them into PostgreSQL to answer
 five business questions via SQL.
 
 > **Note on data source:** as documented in [`decision.md`](decision.md),
-> Mercado Libre's `/search` and `/items` public endpoints have been
-> restricted by platform policy since April 2025 and return `403
-> Forbidden` even with a valid, correctly-scoped OAuth token — a known,
-> widely reported issue independent of this implementation. This
-> pipeline detects that condition automatically and falls back to a
+> Mercado Libre's `/search` and `/items` public endpoints return `403
+> Forbidden` even with a valid, correctly-scoped OAuth token. This
+> matches a known issue publicly reported by other developers since at
+> least April 2025 (see `decision.md` §1 for sources) — Mercado Libre
+> has not published an official changelog entry for it, so I can't
+> confirm an exact rollout date, only that the restriction is real,
+> current, and outside this implementation's control. This pipeline
+> detects that condition automatically and falls back to a
 > schema-accurate sample dataset, while `/currency_conversions` runs
 > against the **real, live API** via OAuth Client Credentials. Every row
 > in the database is tagged with `data_source = 'live' | 'sample'`, so

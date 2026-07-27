@@ -10,12 +10,15 @@ PostgreSQL para responder cinco preguntas de negocio vía SQL.
 
 > **Nota sobre la fuente de datos:** como se documenta en
 > [`decision.md`](decision.md), los endpoints públicos `/search` e
-> `/items` de Mercado Libre están restringidos por política de la
-> plataforma desde abril de 2025 y devuelven `403 Forbidden` incluso
-> con un token OAuth válido y correctamente scoped — un problema
-> conocido y ampliamente reportado, independiente de esta
-> implementación. Este pipeline detecta esa condición automáticamente
-> y recurre a un dataset de muestra fiel al esquema real, mientras que
+> `/items` de Mercado Libre devuelven `403 Forbidden` incluso con un
+> token OAuth válido y correctamente scoped. Esto coincide con un
+> problema conocido, reportado públicamente por otros desarrolladores
+> desde al menos abril de 2025 (ver `decision.md` §1 para las fuentes)
+> — Mercado Libre no publicó un changelog oficial al respecto, así que
+> no puedo confirmar una fecha exacta de despliegue, solo que la
+> restricción es real, actual, e independiente de esta implementación.
+> Este pipeline detecta esa condición automáticamente y recurre a un
+> dataset de muestra fiel al esquema real, mientras que
 > `/currency_conversions` corre contra la **API real y en vivo** vía
 > OAuth Client Credentials. Cada fila en la base de datos está
 > etiquetada con `data_source = 'live' | 'sample'`, así que esto es

@@ -20,27 +20,38 @@ this was expected behavior:
 
 - Confirmed the OAuth token was valid by successfully calling other
   authenticated endpoints.
-- Found that Mercado Libre restricted public access to the general
-  `/search` endpoint starting **April 2025**: general product search now
-  requires an authenticated user token tied to an account that has
-  explicitly granted permission — not just a valid app-level token.
-- Found multiple recent, independent reports (developer forums, public
-  complaint boards, and third-party API client repositories that
-  deprecated their own `search` integrations) confirming that `403` on
-  `/search` and `/items` persists even for developers with fully valid
-  OAuth tokens and certified applications, as of the challenge deadline.
+- Found a GitHub issue opened on Mercado Libre's own `golang-restclient`
+  repository (dated April 1, 2025) reporting the identical symptom:
+  `403 Forbidden` on `/sites/{SITE_ID}/search` with a token that works
+  correctly on other endpoints like `/users/me`. I found no official
+  Mercado Libre changelog, blog post, or developer-portal announcement
+  documenting this restriction — this GitHub issue is simply the
+  earliest public report of the symptom I could find, not a confirmed
+  rollout date.
+- Found further independent reports (developer forums, public
+  complaint boards, and third-party API client repositories — including
+  a community-maintained MCP server that deprecated its own `search`
+  tool "due to changes in MercadoLibre's API policies") confirming that
+  `403` on `/search` and `/items` persists even for developers with
+  fully valid OAuth tokens and certified applications, as of the
+  challenge deadline.
 
-**Conclusion:** this is a deliberate platform-level access policy, not a
-bug in my implementation. The challenge statement (and much of Mercado
-Libre's own public documentation) predates this policy change.
+**Conclusion:** the evidence points to a deliberate platform-level
+access policy, not a bug in my implementation — though I want to be
+precise that this is inferred from developer reports, not confirmed by
+an official Mercado Libre announcement. The challenge statement (and
+much of Mercado Libre's own public documentation) appears to predate
+this change.
 
 ### Decision
 
 I did not spend further time trying to "solve" an access restriction
 that is outside application-level control. Instead, I:
 
-1. Notified the recruiter in writing as soon as the issue was confirmed,
-   including the exact error and my investigation summary.
+1. Documented the exact error and my investigation summary in this
+   section, to communicate it transparently to the recruiter together
+   with the final deliverable (repository link and the presentation),
+   rather than treating it as a hidden footnote.
 2. Built the extraction layer to work correctly against the real API
    *if and when access is restored*, with no code changes required.
 3. Implemented an explicit, transparent fallback to a realistic sample

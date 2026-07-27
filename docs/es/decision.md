@@ -24,31 +24,40 @@ era el comportamiento esperado:
 
 - Confirmé que el token OAuth era válido llamando exitosamente a otros
   endpoints autenticados.
-- Encontré que Mercado Libre restringió el acceso público al endpoint
-  general `/search` a partir de **abril de 2025**: la búsqueda general
-  de productos ahora requiere un token de usuario autenticado vinculado
-  a una cuenta que haya otorgado permiso explícitamente — no solo un
-  token válido a nivel de aplicación.
-- Encontré múltiples reportes recientes e independientes (foros de
-  desarrolladores, plataformas públicas de reclamos y repositorios de
-  clientes de API de terceros que discontinuaron sus propias
-  integraciones de `search`) que confirman que el `403` en `/search` y
-  `/items` persiste incluso para desarrolladores con tokens OAuth
-  completamente válidos y aplicaciones certificadas, hasta la fecha
-  límite de este desafío.
+- Encontré un issue abierto en el propio repositorio `golang-restclient`
+  de Mercado Libre en GitHub (fechado el 1 de abril de 2025) que reporta
+  el mismo síntoma exacto: `403 Forbidden` en `/sites/{SITE_ID}/search`
+  con un token que funciona correctamente en otros endpoints como
+  `/users/me`. No encontré ningún changelog oficial, post de blog ni
+  anuncio en el portal de desarrolladores de Mercado Libre que
+  documente esta restricción — este issue de GitHub es simplemente el
+  reporte público más antiguo que encontré de este síntoma, no una
+  fecha de despliegue confirmada.
+- Encontré más reportes independientes (foros de desarrolladores,
+  plataformas públicas de reclamos y repositorios de clientes de API de
+  terceros — incluyendo un servidor MCP mantenido por la comunidad que
+  discontinuó su propia herramienta de `search` "debido a cambios en
+  las políticas de la API de MercadoLibre") que confirman que el `403`
+  en `/search` y `/items` persiste incluso para desarrolladores con
+  tokens OAuth completamente válidos y aplicaciones certificadas, hasta
+  la fecha límite de este desafío.
 
-**Conclusión:** esta es una política de acceso deliberada a nivel de
-plataforma, no un error en mi implementación. El enunciado del desafío
-(y gran parte de la documentación pública de Mercado Libre) es anterior
-a este cambio de política.
+**Conclusión:** la evidencia apunta a una política de acceso
+deliberada a nivel de plataforma, no un error en mi implementación —
+aunque quiero ser preciso: esto se infiere de reportes de
+desarrolladores, no está confirmado por un anuncio oficial de Mercado
+Libre. El enunciado del desafío (y gran parte de la documentación
+pública de Mercado Libre) parece ser anterior a este cambio.
 
 ### Decisión
 
 No dediqué más tiempo a intentar "resolver" una restricción de acceso
 que está fuera del control de la aplicación. En cambio:
 
-1. Notifiqué al reclutador por escrito apenas confirmé el problema,
-   incluyendo el error exacto y el resumen de mi investigación.
+1. Documenté el error exacto y el resumen de mi investigación en esta
+   sección, para comunicarlo con transparencia a la recrutadora junto
+   con la entrega final (enlace al repositorio y esta presentación),
+   en lugar de tratarlo como una nota oculta.
 2. Construí la capa de extracción para que funcione correctamente
    contra la API real *si y cuando se restablezca el acceso*, sin
    requerir cambios de código.

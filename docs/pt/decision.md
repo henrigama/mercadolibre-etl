@@ -20,31 +20,40 @@ era o comportamento esperado:
 
 - Confirmei que o token OAuth era válido chamando com sucesso outros
   endpoints autenticados.
-- Descobri que o Mercado Livre restringiu o acesso público ao endpoint
-  geral `/search` a partir de **abril de 2025**: a busca geral de
-  produtos agora exige um token de usuário autenticado vinculado a uma
-  conta que tenha concedido permissão explicitamente — não apenas um
-  token válido no nível da aplicação.
-- Encontrei diversos relatos recentes e independentes (fóruns de
-  desenvolvedores, plataformas públicas de reclamação e repositórios
-  de clientes de API de terceiros que descontinuaram suas próprias
-  integrações de `search`) confirmando que o `403` em `/search` e
-  `/items` persiste mesmo para desenvolvedores com tokens OAuth
-  totalmente válidos e aplicações certificadas, até o prazo final
+- Encontrei uma issue aberta no próprio repositório `golang-restclient`
+  do Mercado Livre no GitHub (datada de 1º de abril de 2025) relatando
+  o mesmo sintoma exato: `403 Forbidden` em `/sites/{SITE_ID}/search`
+  com um token que funciona corretamente em outros endpoints como
+  `/users/me`. Não encontrei nenhum changelog oficial, post de blog ou
+  anúncio no portal de desenvolvedores do Mercado Livre documentando
+  essa restrição — essa issue do GitHub é simplesmente o relato público
+  mais antigo que encontrei desse sintoma, não uma data de lançamento
+  confirmada.
+- Encontrei mais relatos independentes (fóruns de desenvolvedores,
+  plataformas públicas de reclamação e repositórios de clientes de API
+  de terceiros — incluindo um servidor MCP mantido pela comunidade que
+  descontinuou sua própria ferramenta de `search` "devido a mudanças
+  nas políticas da API do MercadoLibre") confirmando que o `403` em
+  `/search` e `/items` persiste mesmo para desenvolvedores com tokens
+  OAuth totalmente válidos e aplicações certificadas, até o prazo final
   deste desafio.
 
-**Conclusão:** trata-se de uma política de acesso deliberada em nível
-de plataforma, não um bug na minha implementação. O enunciado do
-desafio (e boa parte da própria documentação pública do Mercado Livre)
-é anterior a essa mudança de política.
+**Conclusão:** a evidência aponta para uma política de acesso
+deliberada em nível de plataforma, não um bug na minha implementação —
+embora eu queira ser preciso: isso é inferido de relatos de
+desenvolvedores, não confirmado por um anúncio oficial do Mercado
+Livre. O enunciado do desafio (e boa parte da própria documentação
+pública do Mercado Livre) parece ser anterior a essa mudança.
 
 ### Decisão
 
 Não gastei mais tempo tentando "resolver" uma restrição de acesso que
 está fora do controle da aplicação. Em vez disso:
 
-1. Avisei a recrutadora por escrito assim que confirmei o problema,
-   incluindo o erro exato e o resumo da minha investigação.
+1. Documentei o erro exato e o resumo da minha investigação nesta
+   seção, para comunicar com transparência à recrutadora junto com a
+   entrega final (link do repositório e esta apresentação), em vez de
+   tratar isso como uma nota escondida.
 2. Construí a camada de extração para funcionar corretamente contra a
    API real *se e quando o acesso for restabelecido*, sem exigir
    mudanças de código.
