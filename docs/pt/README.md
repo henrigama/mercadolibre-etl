@@ -7,16 +7,19 @@ responder cinco perguntas de negócio via SQL.
 
 > **Nota sobre a fonte dos dados:** conforme documentado em
 > [`decision.md`](decision.md), os endpoints públicos `/search` e
-> `/items` do Mercado Livre estão restritos por política da plataforma
-> desde abril de 2025 e retornam `403 Forbidden` mesmo com um token
-> OAuth válido e corretamente escopado — um problema conhecido e
-> amplamente reportado, independente desta implementação. Este
-> pipeline detecta essa condição automaticamente e recorre a um
-> dataset de amostra fiel ao esquema real, enquanto
-> `/currency_conversions` roda contra a **API real e ao vivo** via
-> OAuth Client Credentials. Cada linha no banco de dados é marcada com
-> `data_source = 'live' | 'sample'`, então isso é totalmente
-> transparente e auditável — não está escondido.
+> `/items` do Mercado Livre retornam `403 Forbidden` mesmo com um token
+> OAuth válido e corretamente escopado. Isso coincide com um problema
+> conhecido, relatado publicamente por outros desenvolvedores desde
+> pelo menos abril de 2025 (ver `decision.md` §1 para as fontes) — o
+> Mercado Livre não publicou um changelog oficial sobre isso, então não
+> consigo confirmar uma data exata de lançamento, só que a restrição é
+> real, atual, e independente desta implementação. Este pipeline
+> detecta essa condição automaticamente e recorre a um dataset de
+> amostra fiel ao esquema real, enquanto `/currency_conversions` roda
+> contra a **API real e ao vivo** via OAuth Client Credentials. Cada
+> linha no banco de dados é marcada com `data_source = 'live' |
+> 'sample'`, então isso é totalmente transparente e auditável — não
+> está escondido.
 
 ## Arquitetura
 
